@@ -20,7 +20,7 @@ export function NavBar() {
   const router = useRouter();
 
   return (
-    <nav className="flex h-16 items-center justify-between bg-utility-primary px-6 shadow-lg lg:h-20 lg:px-32">
+    <nav className="flex h-16 items-center justify-between bg-utility-primary px-6 shadow-md lg:h-20 lg:px-32">
       <a href="" className="text-2xl font-semibold text-utility-second">
         Merry<span className="font-extrabold text-primary-500">Match</span>
       </a>
@@ -58,7 +58,7 @@ export function NavBar() {
 
         <CustomButton
           buttonType="primary"
-          customStyle="w-20 h-11 font-bold"
+          className="h-11 px-6"
           onClick={() => router.push("/login")}
         >
           Login
