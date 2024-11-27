@@ -7,7 +7,6 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       <NavBar />
-
       <div className="flex-grow">
         <h1 className="font-nunito text-8xl text-primary-400">test</h1>
         <input
