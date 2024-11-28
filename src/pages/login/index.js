@@ -1,7 +1,15 @@
 import { NavBar } from "@/components/NavBar";
 import { CustomButton, CardImage } from "@/components/CustomUi";
+import { useAuth } from "@/contexts/authentication";
+import { useState } from "react";
 
-function CustomInput({ type, label = "Label", placeholder, className = "" }) {
+function CustomInput({
+  type,
+  onChange,
+  label = "Label",
+  placeholder,
+  className = "",
+}) {
   const customStyle =
     `input border-fourth-400 bg-utility-primary text-utility-second transition-colors duration-100 focus:border-second-500 focus:outline-none ${className}`.trim();
 
@@ -10,18 +18,38 @@ function CustomInput({ type, label = "Label", placeholder, className = "" }) {
       <div className="label p-1">
         <span className="label-text text-utility-second">{label}</span>
       </div>
-      <input type={type} placeholder={placeholder} className={customStyle} />
+      <input
+        type={type}
+        placeholder={placeholder}
+        className={customStyle}
+        onChange={onChange}
+      />
     </label>
   );
 }
 
 export default function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { login } = useAuth();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    login({
+      username,
+      password,
+    });
+  };
+
   return (
     <main className="flex min-h-screen flex-col bg-utility-bgMain">
       <NavBar />
 
       {/* Login section */}
       <article className="container mx-auto flex w-full flex-grow flex-col items-center justify-center gap-10 px-5 py-12 lg:flex-row lg:gap-0 lg:p-10 xl:p-20">
+        {/* Image section */}
         <figure className="flex items-center justify-center lg:w-1/2 lg:px-12">
           <CardImage className="h-[25rem] w-[15rem] lg:h-[40rem] lg:w-[25rem]">
             <img
@@ -32,20 +60,18 @@ export default function Login() {
           </CardImage>
         </figure>
 
+        {/* Form section */}
         <div className="flex w-full flex-col gap-8 self-start lg:w-1/2 lg:self-auto lg:p-12">
           <header className="flex flex-col gap-1">
             <h2 className="text-third-700">LOGIN</h2>
             <h1 className="text-3xl font-extrabold leading-tight text-second-500 lg:text-5xl">
-              Welcome <br className="hidden lg:inline xl:hidden" /> back to{" "}
+              Welcome <br className="hidden lg:inline xl:hidden" /> back to
               <br className="inline sm:hidden lg:inline" /> Merry Match
             </h1>
           </header>
 
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              console.log("submitted");
-            }}
+            onSubmit={handleSubmit}
             className="flex flex-col gap-8"
             role="main"
           >
@@ -54,6 +80,7 @@ export default function Login() {
               label="Username or Email"
               placeholder="Enter Username or Email"
               className="w-full"
+              onChange={(e) => setUsername(e.target.value)}
             />
 
             <CustomInput
@@ -61,6 +88,7 @@ export default function Login() {
               label="Password"
               placeholder="Enter password"
               className="w-full"
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <CustomButton type="submit" buttonType="primary" className="w-full">
@@ -69,7 +97,7 @@ export default function Login() {
           </form>
 
           <div className="flex items-center gap-3">
-            <p className="text-utility-second">Don’t have an account?</p>
+            <p className="text-utility-second">Don't have an account?</p>
             <a
               href="/register"
               className="font-bold text-primary-500 transition-colors duration-300 hover:text-primary-600"
