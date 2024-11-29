@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
     if (rows.length === 0) {
       return res.status(404).json({
-        message: "Invalid username",
+        message: { username: "Invalid username or email" },
       });
     }
 
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
     if (user.password !== password) {
       return res.status(400).json({
-        message: "Invalid password",
+        message: { password: "Invalid password" },
       });
     }
 

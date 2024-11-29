@@ -1,7 +1,8 @@
 import { NavBar } from "@/components/NavBar";
 import { CustomButton, CardImage } from "@/components/CustomUi";
-import { useAuth } from "@/contexts/authentication";
+import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
+import { MdError } from "react-icons/md";
 
 function CustomInput({
   type,
@@ -9,21 +10,30 @@ function CustomInput({
   label = "Label",
   placeholder,
   className = "",
+  error = null,
 }) {
-  const customStyle =
-    `input border-fourth-400 bg-utility-primary text-utility-second transition-colors duration-100 focus:border-second-500 focus:outline-none ${className}`.trim();
+  let customStyle =
+    `input border-fourth-400 bg-utility-primary text-utility-second transition-colors duration-300 hover:border-second-500 focus:border-second-500 focus:outline-none ${className}`.trim();
+
+  if (error) {
+    customStyle += " border-utility-third";
+  }
 
   return (
     <label className="form-control w-full">
       <div className="label p-1">
         <span className="label-text text-utility-second">{label}</span>
       </div>
-      <input
-        type={type}
-        placeholder={placeholder}
-        className={customStyle}
-        onChange={onChange}
-      />
+      <div className="relative flex items-center">
+        <input
+          type={type}
+          placeholder={placeholder}
+          className={customStyle}
+          onChange={onChange}
+        />
+        {error && <MdError className="absolute right-3 text-utility-third" />}
+      </div>
+      {error && <p className="p-1 text-sm text-utility-third">{error}</p>}
     </label>
   );
 }
@@ -32,15 +42,11 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { login } = useAuth();
+  const { state, login } = useAuth();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    login({
-      username,
-      password,
-    });
+    await login({ username, password });
   };
 
   return (
@@ -81,6 +87,7 @@ export default function Login() {
               placeholder="Enter Username or Email"
               className="w-full"
               onChange={(e) => setUsername(e.target.value)}
+              error={state.error?.username}
             />
 
             <CustomInput
@@ -89,6 +96,7 @@ export default function Login() {
               placeholder="Enter password"
               className="w-full"
               onChange={(e) => setPassword(e.target.value)}
+              error={state.error?.password}
             />
 
             <CustomButton type="submit" buttonType="primary" className="w-full">

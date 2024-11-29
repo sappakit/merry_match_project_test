@@ -7,6 +7,7 @@ const AuthContext = React.createContext();
 function AuthProvider({ children }) {
   const [state, setState] = useState({
     loading: null,
+    success: null,
     error: null,
     user: null,
   });
@@ -18,14 +19,14 @@ function AuthProvider({ children }) {
     try {
       const result = await axios.post(`${apiBaseUrl}/api/auth/login`, data);
 
-      //   log result
-      console.log(result);
-      alert(result.data.message);
+      setState((prevState) => ({
+        ...prevState,
+        success: result.data?.message,
+        error: null,
+      }));
+
       router.push("/");
     } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
-
       setState((prevState) => ({
         ...prevState,
         error: error.response?.data?.message || "Login failed",
