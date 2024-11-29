@@ -14,8 +14,8 @@ export default function AdminHeader({
     <header className="mb-6 flex items-center justify-between border-b border-gray-300 bg-white px-6 py-4">
       {/* Title */}
       <div className="flex items-center space-x-2">
-        {extraContent && <div>{extraContent}</div>}
         <h2 className="text-2xl font-bold text-fourth-900">{title}</h2>
+        {extraContent && <div>{extraContent}</div>}
       </div>
 
       {/* Search & Buttons */}
@@ -47,6 +47,23 @@ export default function AdminHeader({
               </CustomButton>
             );
           }
+
+          if (button.type === "dropdown") {
+            return (
+              <select
+                key={index}
+                className="w-40 rounded-md border border-gray-300 bg-white px-4 py-2 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                onChange={button.onChange}
+              >
+                {button.options.map((option, idx) => (
+                  <option key={idx} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            );
+          }
+
           return (
             <button
               key={index}

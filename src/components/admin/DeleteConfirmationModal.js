@@ -1,5 +1,6 @@
 import React from "react";
 
+// deleteDetail Step3: เรียกใข้งาน Modal
 export default function DeleteConfirmationModal({
   isOpen,
   onClose,
@@ -30,12 +31,14 @@ export default function DeleteConfirmationModal({
         </div>
 
         <div className="flex justify-end space-x-4 p-4">
+          {/* // deleteDetail Step4: เมื่อกด "Yes, I want to delete".*/}
           <button
             onClick={onConfirm}
             className="rounded-lg bg-pink-100 px-4 py-2 text-pink-500 hover:bg-pink-200"
           >
             {confirmLabel}
           </button>
+          {/*// deleteDetail Step3.1: การยกเลิก model: 1*/}
           <button
             onClick={onClose}
             className="rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
