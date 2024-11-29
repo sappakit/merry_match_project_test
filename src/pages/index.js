@@ -2,15 +2,13 @@ import Image from "next/image";
 import localFont from "next/font/local";
 
 import { NavBar, Footer } from "@/components/NavBar";
-import { CardImage } from "@/components/CustomUi";
-
+import { CustomButton } from "@/components/CustomUi";
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       <NavBar />
 
       <div className="flex-grow">
-        <CardImage image={"/images/person-homepage1.jpg"} />
         <h1 className="font-nunito text-8xl text-primary-400">test</h1>
         <input
           type="text"
@@ -19,6 +17,8 @@ export default function Home() {
         />
         <button className="btn bg-red-500">Button</button>
       </div>
+
+      <CustomButton>MerryMatch</CustomButton>
 
       <Footer />
     </div>
