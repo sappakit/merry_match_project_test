@@ -1,35 +1,89 @@
 import { AdminSideBar } from "@/components/admin/AdminSideBar";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { useState } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
 import DeleteConfirmationModal from "@/components/admin/DeleteConfirmationModal";
 
 function MerryPackageAdd() {
-  const [details, setDetails] = useState([{ id: 1, text: "" }]); // state สำหรับเก็บรายการ Detail โดยเริ่มต้นที่ 1 และ text = ""
+  const router = useRouter(); // เรียกใช้ useRouter
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [detailToDelete, setDetailToDelete] = useState(null); // state สำหรับ delete โดยเก็บค่า id ของแถวนั้นๆ
-  console.log(details);
+  const [details, setDetails] = useState([{ id: 1, text: "" }]); // state สำหรับเก็บรายการ Detail โดยเริ่มต้นที่ 1 และ text = ""
+
+  const [packageName, setPackageName] = useState("");
+  const [merryLimit, setMerryLimit] = useState("");
+
+  //const [icon, setIcon] = useState(null);
+
+  const handleAddPackage = async () => {
+    try {
+      // Step 1: อัปโหลด Icon ไปยัง Cloudinary (ถ้าต้องการ)
+      // let iconUrl = "";
+      //if (icon) {
+      //  const formData = new FormData();
+      //  formData.append("file", icon);
+
+      // const uploadRes = await axios.post("/api/upload", formData, {
+      //   headers: { "Content-Type": "multipart/form-data" },
+      //  });
+      //  iconUrl = uploadRes.data.url;
+      //}
+
+      // Validation ข้อมูลก่อนส่ง
+      if (!packageName || !merryLimit === 0) {
+        // || details.length
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      // Step 2: ส่งข้อมูลแพ็กเกจไปยัง API
+      const packageData = {
+        package_name: packageName,
+        merry_limit: parseInt(merryLimit || "0", 10),
+        // icon_url: iconUrl,
+        details: JSON.stringify(details.map((d) => d.text)) || null,
+      };
+
+      console.log("Data to be sent to API:", packageData); // Debug Data ก่อนส่ง
+
+      const res = await axios.post(
+        "http://localhost:3000/api/admin/packages",
+        packageData,
+      );
+
+      if (res.status === 201) {
+        alert("Package added successfully!");
+        resetForm(); // ล้างฟอร์มหลังจากสำเร็จ
+        router.push("/admin/merry-package-list");
+      }
+    } catch (error) {
+      console.error(error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        alert(error.response.data.message);
+      } else {
+        alert("An unexpected error occurred.");
+      }
+    }
+  };
+
+  // รีเซ็ตฟอร์ม
+  const resetForm = () => {
+    setPackageName("");
+    setMerryLimit("");
+    //setIcon(null);
+    setDetails([{ id: 1, text: "" }]);
+  };
 
   // addDetail Step2:
   // ใช้ setDetails เพื่อเพิ่ม object ใหม่ใน array ของ state : details
+  // เพิ่ม Detail ใหม่
   const addDetail = () => {
     setDetails([...details, { id: details.length + 1, text: "" }]);
-  };
-
-  // deleteDetail Step2:
-  // เรียกใช้ state: setDetailToDelete  เพื่อเก็บค่า id ของแถวนั้นๆที่จะทำการลบ detail
-  // เรียก setIsModalOpen จากเดิมเป็น false > true เพื่อเปิดการใช้งาน DeleteConfirmationModal จากการเรียกใช้ props ใน DeleteConfirmationModal.JS
-  const confirmDelete = (id) => {
-    setDetailToDelete(id);
-    setIsModalOpen(true);
-  };
-
-  //deleteDetail Step6: ใช้ filter เพื่อลบ detail ที่มี id ตรงกับ detailToDelete
-  // ตั้งค่า isModalOpen เป็น false เพื่อปิด Modal.
-  // รีเซ็ต detailToDelete เป็น null
-  const handleDelete = () => {
-    setDetails(details.filter((detail) => detail.id !== detailToDelete));
-    setIsModalOpen(false);
-    setDetailToDelete(null);
   };
 
   // deleteDetail Step3.3: เรียกใช้ setIsModalOpen เพื่อ false ปิดหน้า Modal
@@ -42,6 +96,8 @@ function MerryPackageAdd() {
   // เช็คว่า id ตรงกับรายการที่ต้องการแก้ไขหรือไม่
   // ถ้าใช่: สร้าง object ใหม่ โดยเปลี่ยนค่าของ text เป็น value.
   // ถ้าไม่ใช่: คืนค่ารายการเดิม.
+
+  // อัปเดต Detail
   const updateDetail = (id, value) => {
     setDetails(
       details.map((detail) =>
@@ -49,6 +105,22 @@ function MerryPackageAdd() {
       ),
     );
   };
+
+  // ลบ Detail
+  const handleDelete = (id) => {
+    setDetails(details.filter((detail) => detail.id !== id));
+  };
+
+  {
+    /*
+    
+     const handleIconChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setIcon(e.target.files[0]);
+    }
+  };
+  */
+  }
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -61,10 +133,12 @@ function MerryPackageAdd() {
             {
               label: "Cancel",
               type: "secondary",
+              onClick: () => router.push("/admin/merry-package-list"),
             },
             {
               label: "Create",
               type: "primary",
+              onClick: handleAddPackage,
             },
           ]}
         />
@@ -81,6 +155,8 @@ function MerryPackageAdd() {
                 <input
                   id="packageName"
                   type="text"
+                  value={packageName}
+                  onChange={(e) => setPackageName(e.target.value)}
                   className="mt-1 h-12 w-full rounded-md border-2 border-gray-300 px-4 shadow-sm"
                 />
               </div>
@@ -94,6 +170,8 @@ function MerryPackageAdd() {
                 </label>
                 <select
                   id="merryLimit"
+                  value={merryLimit}
+                  onChange={(e) => setMerryLimit(e.target.value)}
                   className="mt-1 h-12 w-full rounded-md border-2 border-gray-300 px-4 shadow-sm"
                 >
                   <option value=""></option>
@@ -106,7 +184,10 @@ function MerryPackageAdd() {
 
             {/* Upload Icon */}
             <div className="mb-8">
-              <label htmlFor="icon" className="block font-medium text-gray-700">
+              <label
+                htmlFor="icon-upload"
+                className="block font-medium text-gray-700"
+              >
                 Icon <span className="text-red-500">*</span>
               </label>
               <div className="mt-4 flex h-32 w-32 items-center justify-center rounded-3xl border-gray-300 bg-gray-100">
@@ -136,18 +217,21 @@ function MerryPackageAdd() {
                   className="mt-4 flex items-center space-x-4"
                 >
                   <span className="cursor-move text-gray-400">⋮⋮</span>
-
-                  <input
-                    type="text"
-                    placeholder="Enter detail"
-                    value={detail.text}
-                    //updateDetail Step1: เก็บค่า key={detail.id} และ e.target.value
-                    onChange={(e) => updateDetail(detail.id, e.target.value)}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
-                  />
+                  <label className="w-full">
+                    <input
+                      type="text"
+                      placeholder="Enter detail"
+                      value={detail.text}
+                      //updateDetail Step1: เก็บค่า key={detail.id} และ e.target.value
+                      onChange={(e) => updateDetail(detail.id, e.target.value)}
+                      id={`detail-${detail.id}`}
+                      name={`detail-${detail.id}`}
+                      className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                    />
+                  </label>
                   {/* deleteDetail Step1: เรียกใช้ function confirmDelete และส่งค่า detail.id ของแถวนั้นๆ */}
                   <button
-                    onClick={() => confirmDelete(detail.id)}
+                    onClick={() => handleDelete(detail.id)}
                     className="text-gray-400 hover:text-red-500"
                   >
                     Delete
