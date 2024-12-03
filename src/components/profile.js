@@ -1,14 +1,14 @@
-import { NavBar } from "./NavBar";
-import { Footer } from "./NavBar";
 import { CustomButton } from "./CustomUi";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function Profile() {
+  const [date, setDate] = useState("");
+
+  const router = useRouter();
+
   return (
     <>
-      <nav className="nav-bar-section">
-        <NavBar />
-      </nav>
-
       {/* Profile-section */}
       <div className="profile flex flex-col items-center gap-10 px-4 py-10">
         <div className="profile-section flex flex-col gap-10">
@@ -26,6 +26,18 @@ export function Profile() {
             <h4 className="text-2xl font-bold text-fourth-900">
               Basic Information
             </h4>
+            <label className="form-control">
+              <span className="label-text">Date of Birth</span>
+              <input
+                type="date"
+                name="date"
+                value={date}
+                onChange={(event) => {
+                  setDate(event.target.value);
+                }}
+                className="input input-bordered h-[48px] rounded-[8px] border-[1px]"
+              />
+            </label>
             <label className="name-section flex w-full flex-col gap-1">
               <span className="text-base font-normal text-utility-second">
                 Name
@@ -159,6 +171,7 @@ export function Profile() {
             children="Preview Profile"
             buttonType="secondary"
             customStyle="w-[162px] text-base font-bold"
+            onClick={() => router.push("/profile/preview-profile")}
           />
           <CustomButton
             children="Update Profile"
@@ -195,22 +208,18 @@ export function Profile() {
                 <CustomButton
                   children="Yes, I want to delete"
                   buttonType="secondary"
-                  customStyle="text-base font-bold"
+                  className="text-base font-bold"
                 />
                 <CustomButton
                   children="No, I don't"
                   buttonType="primary"
-                  customStyle="text-base font-bold"
+                  className="text-base font-bold"
                 />
               </div>
             </div>
           </dialog>
         </div>
       </div>
-
-      <footer className="footer-section">
-        <Footer />
-      </footer>
     </>
   );
 }
