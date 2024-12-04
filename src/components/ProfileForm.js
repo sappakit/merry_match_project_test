@@ -13,7 +13,7 @@ export function Profile() {
       <div className="profile flex flex-col items-center gap-10 px-4 py-10">
         <div className="profile-section flex flex-col gap-10">
           <div className="title-section flex flex-col gap-2">
-            <span className="text-sm font-semibold text-third-700">
+            <span className="text-sm font-semibold text-third-700 ">
               Profile
             </span>
             <h3 className="text-3xl font-bold text-second-500">

@@ -1,5 +1,5 @@
 import { NavBar } from "@/components/NavBar";
-import { PreviewProfile } from "@/components/Preview-profile";
+import { PreviewProfile } from "@/components/PreviewProfile";
 
 export default function PreviewProfilePage() {
   return (

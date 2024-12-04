@@ -1,5 +1,5 @@
 import { NavBar } from "@/components/NavBar";
-import { Profile } from "@/components/Profile";
+import { Profile } from "@/components/ProfileForm";
 import { Footer } from "@/components/NavBar";
 
 export default function ProfilePage() {
