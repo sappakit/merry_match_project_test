@@ -15,7 +15,18 @@ function MerryPackageAdd() {
   const [merryLimit, setMerryLimit] = useState("");
   const [price, setPrice] = useState(0);
 
-  //const [icon, setIcon] = useState(null);
+  const [icon, setIcon] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setIcon(file);
+    }
+  };
+
+  const handleRemoveIcon = () => {
+    setIcon(null); // ลบรูปที่อัปโหลด
+  };
 
   const handleAddPackage = async () => {
     try {
@@ -26,19 +37,33 @@ function MerryPackageAdd() {
         return;
       }
 
+      {
+        /* 
+          ส่งโดยไม่ใช่ formData  ก่อนที่จะมี cloudinary
       // Step 2: ส่งข้อมูลแพ็กเกจไปยัง API
       const packageData = {
         package_name: packageName,
         merry_limit: parseInt(merryLimit || "0", 10),
         price: parseFloat(price || "0"),
-        // icon_url: iconUrl,
+        avatar: avatar,
         details: JSON.stringify(details.map((d) => d.text)) || null,
       };
       console.log("Sending data to API:", packageData);
+*/
+      }
+      const formData = new FormData();
+      formData.append("package_name", packageName);
+      formData.append("merry_limit", merryLimit);
+      formData.append("price", price);
+      formData.append("details", JSON.stringify(details.map((d) => d.text))); // แปลง details เป็น JSON string
+      if (icon) formData.append("icon", icon);
 
       const res = await axios.post(
         "http://localhost:3000/api/admin/packages",
-        packageData,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
       );
       console.log("Response from APIIIII:", res.data);
       if (res.status === 201) {
@@ -100,17 +125,6 @@ function MerryPackageAdd() {
   const handleDelete = (id) => {
     setDetails(details.filter((detail) => detail.id !== id));
   };
-
-  {
-    /*
-    
-     const handleIconChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setIcon(e.target.files[0]);
-    }
-  };
-  */
-  }
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -191,24 +205,48 @@ function MerryPackageAdd() {
               </div>
             </div>
 
-            {/* Upload Icon */}
-            <div className="mb-8">
-              <label
-                htmlFor="icon-upload"
-                className="block font-medium text-gray-700"
-              >
+            <div className="flex flex-col gap-2">
+              <label className="block font-medium text-gray-700">
                 Icon <span className="text-red-500">*</span>
               </label>
-              <div className="mt-4 flex h-32 w-32 items-center justify-center rounded-3xl border-gray-300 bg-gray-100">
-                <button className="text-primary-500">
-                  <span className="text-3xl">+</span>
-                  <p className="text-sm">Upload icon</p>
-                </button>
+              <div className="relative flex h-32 w-32 items-center justify-center rounded-3xl border border-gray-300 bg-gray-100">
+                {!icon ? (
+                  <>
+                    <input
+                      id="upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
+                    <label
+                      htmlFor="upload"
+                      className="flex cursor-pointer flex-col items-center justify-center text-primary-500"
+                    >
+                      <span className="text-3xl font-bold">+</span>
+                      <p className="text-sm font-medium">Upload icon</p>
+                    </label>
+                  </>
+                ) : (
+                  <div className="relative h-full w-full">
+                    <img
+                      src={URL.createObjectURL(icon)}
+                      alt="Uploaded Icon"
+                      className="h-full w-full rounded-3xl object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleRemoveIcon}
+                      className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white hover:bg-red-600"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
             <hr className="my-8 border-gray-300" />
-
             {/* Package Details */}
             <div>
               <h3 className="text-lg font-semibold text-gray-700">
