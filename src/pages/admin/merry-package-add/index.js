@@ -13,23 +13,12 @@ function MerryPackageAdd() {
 
   const [packageName, setPackageName] = useState("");
   const [merryLimit, setMerryLimit] = useState("");
+  const [price, setPrice] = useState(0);
 
   //const [icon, setIcon] = useState(null);
 
   const handleAddPackage = async () => {
     try {
-      // Step 1: อัปโหลด Icon ไปยัง Cloudinary (ถ้าต้องการ)
-      // let iconUrl = "";
-      //if (icon) {
-      //  const formData = new FormData();
-      //  formData.append("file", icon);
-
-      // const uploadRes = await axios.post("/api/upload", formData, {
-      //   headers: { "Content-Type": "multipart/form-data" },
-      //  });
-      //  iconUrl = uploadRes.data.url;
-      //}
-
       // Validation ข้อมูลก่อนส่ง
       if (!packageName || !merryLimit === 0) {
         // || details.length
@@ -41,20 +30,20 @@ function MerryPackageAdd() {
       const packageData = {
         package_name: packageName,
         merry_limit: parseInt(merryLimit || "0", 10),
+        price: parseFloat(price || "0"),
         // icon_url: iconUrl,
         details: JSON.stringify(details.map((d) => d.text)) || null,
       };
-
-      console.log("Data to be sent to API:", packageData); // Debug Data ก่อนส่ง
+      console.log("Sending data to API:", packageData);
 
       const res = await axios.post(
         "http://localhost:3000/api/admin/packages",
         packageData,
       );
-
+      console.log("Response from APIIIII:", res.data);
       if (res.status === 201) {
         alert("Package added successfully!");
-        resetForm(); // ล้างฟอร์มหลังจากสำเร็จ
+        //resetForm(); // ล้างฟอร์มหลังจากสำเร็จ
         router.push("/admin/merry-package-list");
       }
     } catch (error) {
@@ -76,6 +65,7 @@ function MerryPackageAdd() {
     setPackageName("");
     setMerryLimit("");
     //setIcon(null);
+    setPrice("");
     setDetails([{ id: 1, text: "" }]);
   };
 
@@ -179,6 +169,25 @@ function MerryPackageAdd() {
                   <option value="45">45</option>
                   <option value="70">70</option>
                 </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="packageName"
+                  className="block font-medium text-gray-700"
+                >
+                  Price <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="price"
+                  type="text"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  className="mt-1 h-12 w-full rounded-md border-2 border-gray-300 px-4 shadow-sm"
+                />
+              </div>
+              <div>
+                <input className="mt-1 hidden h-12 w-full rounded-md border-2 border-gray-300 px-4 shadow-sm" />
               </div>
             </div>
 

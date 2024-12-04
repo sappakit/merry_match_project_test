@@ -61,9 +61,10 @@ function MerryPackageList() {
   const handleDelete = async () => {
     try {
       // เรียก API เพื่อลบข้อมูลในฐานข้อมูล
-      await axios.delete("/api/admin/packages", {
-        data: { id: detailToDelete },
-      });
+      await axios.delete(
+        `http://localhost:3000/api/admin/packages/${detailToDelete}`,
+      );
+      //, {data: { id: detailToDelete },}
       // อัปเดตรายการ package หลังลบสำเร็จ
       setPackages(packages.filter((pkg) => pkg.package_id !== detailToDelete));
 
@@ -153,7 +154,14 @@ function MerryPackageList() {
                       className="cursor-pointer text-2xl text-primary-300"
                       onClick={() => confirmDelete(pkg.package_id)}
                     />
-                    <FaEdit className="cursor-pointer text-2xl text-primary-300" />
+                    <FaEdit
+                      className="cursor-pointer text-2xl text-primary-300"
+                      onClick={() =>
+                        router.push(
+                          `/admin/merry-package-list/${pkg.package_id}`,
+                        )
+                      }
+                    />
                   </td>
                 </tr>
               ))}
