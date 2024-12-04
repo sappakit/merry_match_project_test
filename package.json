@@ -40,7 +40,9 @@
     "pg-promise": "^11.10.2",
     "react-quill": "^2.0.0",
     "react-router-dom": "^7.0.1",
-    "react-toastify": "^10.0.6"
+    "react-toastify": "^10.0.6",
+    "react-range": "^1.10.0",
+    "swiper": "^11.1.15"
   },
   "devDependencies": {
     "daisyui": "^4.12.14",

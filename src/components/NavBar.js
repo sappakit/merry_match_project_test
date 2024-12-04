@@ -20,8 +20,8 @@ export function NavBar() {
   const router = useRouter();
 
   return (
-    <nav className="flex h-16 items-center justify-between bg-utility-primary px-6 overflow-hidden shadow-lg lg:h-20 lg:px-32">
-      <a href="" className="text-2xl font-semibold text-utility-second">
+    <nav className="z-50 overflow-hidden flex h-16 items-center justify-between bg-utility-primary px-6 shadow-md lg:h-20 lg:px-32">
+      <a href="/" className="text-2xl font-semibold text-utility-second">
         Merry<span className="font-extrabold text-primary-500">Match</span>
       </a>
 

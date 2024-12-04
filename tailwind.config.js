@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import daisyui from "daisyui"
+import daisyui from "daisyui";
 module.exports = {
     darkMode: ["class"],
     content: [
@@ -10,6 +10,9 @@ module.exports = {
   ],
   theme: {
   	extend: {
+		backgroundImage: {
+			cardGradient: "linear-gradient(to bottom,transparent 70%,#390741)",
+		  },
   		fontFamily: {
   			nunito: ["Nunito", "serif"]
   		},
