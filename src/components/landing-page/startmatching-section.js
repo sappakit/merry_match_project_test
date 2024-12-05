@@ -1,6 +1,10 @@
 import { CustomButton } from "@/components/CustomUi";
+import { useRouter } from "next/router";
 import { GoHeartFill } from "react-icons/go";
+
 export default function StartMacthing() {
+  const router = useRouter();
+
   return (
     <>
       <section className="mx-auto flex items-center justify-center bg-utility-bg lg:px-16 lg:pb-10">
@@ -18,6 +22,7 @@ export default function StartMacthing() {
           <CustomButton
             className="bg-white px-6 py-3 font-semibold"
             buttonType="secondary"
+            onClick={() => router.push("/matches")}
           >
             Start Matching!
           </CustomButton>
