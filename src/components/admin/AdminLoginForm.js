@@ -107,7 +107,7 @@ export default function AdminLoginForm() {
           </form>
 
           <div className="flex items-center gap-3">
-            <p className="text-utility-second">Don't have an account?</p>
+            <p className="text-utility-second">Don&apos;t have an account?</p>
             <Link
               href="/register"
               className="font-bold text-primary-500 transition-colors duration-300 hover:text-primary-600"
