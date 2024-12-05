@@ -24,7 +24,8 @@ export default async function handler(req, res) {
         message: { password: "Invalid password" },
       });
     }
-
+    // เพิ่มการส่ง role กลับไป
+    //return res.status(200).json({ message: "Login successful", role: user.role });
     return res.status(200).json({ message: "Login successful" });
   } catch (error) {
     console.error(error);
