@@ -10,6 +10,7 @@ function MerryPackageEdit() {
   const { id } = router.query; // ดึง `id` จาก URL
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   // deleteDetail Step3.3: เรียกใช้ setIsModalOpen เพื่อ false ปิดหน้า Modal
   const closeModal = () => {
@@ -40,7 +41,9 @@ function MerryPackageEdit() {
     litmit_match: "",
     description: "",
     price: 0,
+    icon_url: "",
   });
+  const [newIcon, setNewIcon] = useState(null); // เก็บรูปภาพใหม่ที่อัปโหลด
 
   //const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState([{ id: 1, text: "" }]); // state สำหรับเก็บรายการ Detail โดยเริ่มต้นที่ 1 และ text = ""
@@ -63,10 +66,10 @@ function MerryPackageEdit() {
   };
 
   useEffect(() => {
-    if (id) {
+    if (id && !isSaving) {
       fetchPackageData();
     }
-  }, [id]);
+  }, [id, isSaving]);
 
   const fetchPackageData = async () => {
     try {
@@ -83,22 +86,46 @@ function MerryPackageEdit() {
     }
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setNewIcon(file); // เก็บรูปภาพใหม่ใน state
+      const previewUrl = URL.createObjectURL(file); // สร้าง URL ชั่วคราวสำหรับรูปภาพ
+      setPackageData({ ...packageData, icon_url: previewUrl }); // อัปเดต state ให้แสดง preview
+    }
+  };
+
+  const handleRemoveIcon = () => {
+    setNewIcon(null); // ลบรูปภาพใหม่
+    setPackageData({ ...packageData, icon_url: "" }); // ลบรูปภาพเดิม
+  };
+
   const handleSave = async () => {
     if (!id) {
       alert("Invalid package ID.");
       return;
     }
 
-    console.log("Data to Update:", packageData); // Debug ข้อมูลที่ส่ง
-
-    const updatedData = {
-      ...packageData,
-      description: JSON.stringify(details.map((d) => d.text)), // แปลง `details` เป็น JSON string
-      litmit_match: parseInt(packageData.litmit_match, 10), // ตรวจสอบให้เป็นตัวเลข
-    };
+    const formData = new FormData();
+    formData.append("name_package", packageData.name_package);
+    formData.append("litmit_match", packageData.litmit_match);
+    formData.append("price", packageData.price);
+    formData.append("description", JSON.stringify(details.map((d) => d.text)));
+    if (newIcon) formData.append("icon", newIcon); // เพิ่มรูปภาพใหม่ถ้ามี
 
     try {
-      await axios.put(`/api/admin/packages/${id}`, updatedData);
+      const response = await axios.put(`/api/admin/packages/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      // ตรวจสอบว่า API ส่ง URL ของรูปภาพใหม่กลับมาหรือไม่
+      if (response.data.icon_url) {
+        setPackageData((prev) => ({
+          ...prev,
+          icon_url: response.data.icon_url, // ใช้ URL ใหม่จาก API
+        }));
+      }
+
       alert("Package updated successfully!");
       router.push("/admin/merry-package-list");
     } catch (error) {
@@ -204,18 +231,44 @@ function MerryPackageEdit() {
             </div>
 
             {/* Upload Icon */}
-            <div className="mb-8">
-              <label
-                htmlFor="icon-upload"
-                className="block font-medium text-gray-700"
-              >
+            <div className="mt-8">
+              <label className="block font-medium text-gray-700">
                 Icon <span className="text-red-500">*</span>
               </label>
-              <div className="mt-4 flex h-32 w-32 items-center justify-center rounded-3xl border-gray-300 bg-gray-100">
-                <button className="text-primary-500">
-                  <span className="text-3xl">+</span>
-                  <p className="text-sm">Upload icon</p>
-                </button>
+              <div className="mt-4 flex h-32 w-32 items-center justify-center rounded-3xl border">
+                {!newIcon && packageData.icon_url ? (
+                  <div className="relative h-full w-full">
+                    <img
+                      src={packageData.icon_url}
+                      alt="Icon"
+                      className="h-full w-full rounded-3xl object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleRemoveIcon}
+                      className="absolute right-2 top-2 h-6 w-6 rounded-full bg-red-500 text-white"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <input
+                      id="iconUpload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
+                    <label
+                      htmlFor="iconUpload"
+                      className="cursor-pointer text-primary-500"
+                    >
+                      <span className="text-3xl">+</span>
+                      <p>Upload Icon</p>
+                    </label>
+                  </>
+                )}
               </div>
             </div>
 

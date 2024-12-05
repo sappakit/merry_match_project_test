@@ -12,7 +12,7 @@ import DeleteConfirmationModal from "@/components/admin/DeleteConfirmationModal"
 function MerryPackageList() {
   const [packages, setPackages] = useState([]);
   const router = useRouter(); // เรียกใช้ useRouter
-
+  const [searchQuery, setSearchQuery] = useState(""); // for Search
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [detailToDelete, setDetailToDelete] = useState(null); // state สำหรับ delete โดยเก็บค่า id ของแถวนั้นๆ
 
@@ -25,6 +25,16 @@ function MerryPackageList() {
       console.error("Error fetching packages:", error);
     }
   };
+
+  // ฟังก์ชันสำหรับจัดการการเปลี่ยนแปลงใน Search
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value); // อัปเดตคำค้นหาใน state
+  };
+
+  // Filter packages based on search query
+  const filteredPackages = packages.filter(
+    (pkg) => pkg.name_package.toLowerCase().includes(searchQuery.toLowerCase()), // กรองชื่อแพ็กเกจตาม searchQuery
+  );
 
   // ฟังก์ชันสำหรับลบ package  old
   const deletePackage = async (id) => {
@@ -101,6 +111,7 @@ function MerryPackageList() {
         <AdminHeader
           title="Merry Package"
           searchPlaceholder="Search..."
+          onSearchChange={handleSearchChange} // ใช้ฟังก์ชันจัดการ Search
           buttons={[
             {
               label: "+ Add Package",
@@ -115,53 +126,72 @@ function MerryPackageList() {
           <table className="min-w-full rounded-lg bg-white shadow-md">
             <thead className="bg-fourth-400">
               <tr>
-                <th className="rounded-tl-lg px-6 py-3 font-medium text-gray-600"></th>
-                <th className="px-6 py-3 text-sm font-medium leading-5 text-fourth-800"></th>
-                <th className="px-6 py-3 text-sm font-medium leading-5 text-fourth-800">
+                <th className="rounded-tl-lg px-6 py-3 text-center font-medium text-gray-600"></th>
+                <th className="px-6 py-3 text-center text-sm font-medium leading-5 text-fourth-800"></th>
+                <th className="px-6 py-3 text-center text-sm font-medium leading-5 text-fourth-800">
                   Icon
                 </th>
-                <th className="px-6 py-3 text-sm font-medium leading-5 text-fourth-800">
+                <th className="px-6 py-3 text-center text-sm font-medium leading-5 text-fourth-800">
                   Package Name
                 </th>
-                <th className="px-6 py-3 text-sm font-medium leading-5 text-fourth-800">
+                <th className="px-6 py-3 text-center text-sm font-medium leading-5 text-fourth-800">
                   Merry Limit
                 </th>
-                <th className="px-6 py-3 text-sm font-medium leading-5 text-fourth-800">
+                <th className="px-6 py-3 text-center text-sm font-medium leading-5 text-fourth-800">
                   Created Date
                 </th>
-                <th className="px-6 py-3 text-sm font-medium leading-5 text-fourth-800">
+                <th className="px-6 py-3 text-center text-sm font-medium leading-5 text-fourth-800">
                   Updated Date
                 </th>
                 <th className="rounded-tr-lg px-6 py-3 text-center font-medium text-gray-600"></th>
               </tr>
             </thead>
-            <tbody className="text-center">
-              {packages.map((pkg, index) => (
-                <tr key={pkg.package_id} className="border-t hover:bg-gray-50">
-                  <td className="px-6 py-4 text-gray-500">
+            <tbody>
+              {filteredPackages.map((pkg, index) => (
+                <tr
+                  key={pkg.package_id}
+                  className="border-t text-center align-middle hover:bg-gray-50"
+                >
+                  <td className="px-6 py-4 align-middle">
                     <span className="cursor-move">⋮⋮</span>
                   </td>
-                  <td className="px-6 py-4">{index + 1}</td>
-                  <td className="px-6 py-4">❤️</td>
-                  <td className="px-6 py-4">{pkg.name_package}</td>
-                  <td className="px-6 py-4">{pkg.litmit_match}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 align-middle">{index + 1}</td>
+                  <td className="px-6 py-4 align-middle">
+                    {pkg.icon_url ? (
+                      <img
+                        src={pkg.icon_url}
+                        alt="Package Icon"
+                        className="mx-auto h-8 w-8 rounded-lg object-cover"
+                      />
+                    ) : (
+                      <span className="text-gray-500">No Image</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 align-middle">{pkg.name_package}</td>
+                  <td className="px-6 py-4 align-middle">{pkg.litmit_match}</td>
+                  <td className="px-6 py-4 align-middle">
                     {new Date(pkg.created_at).toLocaleString()}
                   </td>
-                  <td className="px-6 py-4"></td>
-                  <td className="flex gap-5 px-6 py-4 text-center">
-                    <FaTrashAlt
-                      className="cursor-pointer text-2xl text-primary-300"
-                      onClick={() => confirmDelete(pkg.package_id)}
-                    />
-                    <FaEdit
-                      className="cursor-pointer text-2xl text-primary-300"
-                      onClick={() =>
-                        router.push(
-                          `/admin/merry-package-list/${pkg.package_id}`,
-                        )
-                      }
-                    />
+                  <td className="px-6 py-4 align-middle">
+                    {pkg.updated_at
+                      ? new Date(pkg.updated_at).toLocaleString()
+                      : "Not updated"}
+                  </td>
+                  <td className="px-6 py-4 align-middle">
+                    <div className="flex items-center justify-center gap-4">
+                      <FaTrashAlt
+                        className="cursor-pointer text-2xl text-primary-300"
+                        onClick={() => confirmDelete(pkg.package_id)}
+                      />
+                      <FaEdit
+                        className="cursor-pointer text-2xl text-primary-300"
+                        onClick={() =>
+                          router.push(
+                            `/admin/merry-package-list/${pkg.package_id}`,
+                          )
+                        }
+                      />
+                    </div>
                   </td>
                 </tr>
               ))}

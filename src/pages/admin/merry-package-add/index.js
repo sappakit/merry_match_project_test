@@ -209,7 +209,7 @@ function MerryPackageAdd() {
               <label className="block font-medium text-gray-700">
                 Icon <span className="text-red-500">*</span>
               </label>
-              <div className="relative flex h-32 w-32 items-center justify-center rounded-3xl border border-gray-300 bg-gray-100">
+              <div className="relative flex h-32 w-32 items-center justify-center overflow-hidden rounded-3xl border border-gray-300 bg-gray-100">
                 {!icon ? (
                   <>
                     <input
@@ -232,7 +232,7 @@ function MerryPackageAdd() {
                     <img
                       src={URL.createObjectURL(icon)}
                       alt="Uploaded Icon"
-                      className="h-full w-full rounded-3xl object-cover"
+                      className="h-full w-full rounded-lg object-fill" //object-contain
                     />
                     <button
                       type="button"
