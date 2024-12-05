@@ -5,10 +5,9 @@ import { GoHeartFill } from "react-icons/go";
 export default function HeaderSection() {
   return (
     <>
-      {/* เหลือแก้ responsive และ ใส่ chat buble  */}
-
-      <header className="relative flex min-h-screen flex-col overflow-hidden pb-96 lg:flex lg:flex-row lg:items-center lg:justify-center bg-second-900 lg:pb-0">
-      <div className="absolute hidden lg:block  rounded-full w-2 h-2 top-[4rem]  right-[38rem]"> <GoHeartFill className="text-second-600"/>  </div>
+  
+      <header className="relative flex min-h-screen flex-col overflow-hidden  pb-96 lg:flex lg:flex-row lg:items-center lg:justify-center bg-utility-bg lg:pb-24">
+      <div className="absolute hidden lg:block  rounded-full w-2 h-2 top-[4rem]  right-[38rem]"> <GoHeartFill className="text-second-600 w-5 h-5"/>  </div>
       <div className="absolute hidden lg:block  rounded-full w-2 h-2 bg-primary-300 top-[2.5rem] left-[4rem]">  </div>
         <div className="absolute hidden lg:block  rounded-full w-10 h-10 bg-second-700 top-[4rem] -left-[0.5rem]">  </div>
         <div className="absolute hidden lg:block  rounded-full w-10 h-10 bg-second-800 top-[25rem] right-[4rem]">   </div>
