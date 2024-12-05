@@ -11,14 +11,31 @@ export function Profile() {
     <>
       {/* Profile-section */}
       <div className="profile flex flex-col items-center gap-10 px-4 py-10">
-        <div className="profile-section flex flex-col gap-10">
-          <div className="title-section flex flex-col gap-2">
-            <span className="text-sm font-semibold text-third-700 ">
-              Profile
-            </span>
-            <h3 className="text-3xl font-bold text-second-500">
-              Let's make profile to let others know you
-            </h3>
+        <div className="profile-section flex flex-col gap-10 lg:mx-auto lg:gap-20">
+          <div className="title-section flex flex-col gap-2 lg:flex-row lg:gap-20">
+            <div className="title lg:flex lg:w-[517px] lg:flex-col lg:gap-2">
+              <span className="text-sm font-semibold text-third-700">
+                PROFILE
+              </span>
+              <h3 className="text-3xl font-bold text-second-500 lg:text-5xl lg:font-extrabold">
+                Let's make profile to let others know you
+              </h3>
+            </div>
+            <div className="lg:flex lg:flex-col lg:justify-end">
+              <div className="button-section hidden flex-row gap-4 lg:flex lg:h-[48px]">
+                <CustomButton
+                  children="Preview Profile"
+                  buttonType="secondary"
+                  customStyle="w-[162px] text-base font-bold"
+                  onClick={() => router.push("/profile/preview-profile")}
+                />
+                <CustomButton
+                  children="Update Profile"
+                  buttonType="primary"
+                  customStyle="w-[162px] text-base font-bold"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Basic Information */}
@@ -26,69 +43,85 @@ export function Profile() {
             <h4 className="text-2xl font-bold text-fourth-900">
               Basic Information
             </h4>
-            <label className="form-control">
-              <span className="label-text">Date of Birth</span>
-              <input
-                type="date"
-                name="date"
-                value={date}
-                onChange={(event) => {
-                  setDate(event.target.value);
-                }}
-                className="input input-bordered h-[48px] rounded-[8px] border-[1px]"
-              />
-            </label>
-            <label className="name-section flex w-full flex-col gap-1">
-              <span className="text-base font-normal text-utility-second">
-                Name
-              </span>
-              <input type="text" className="h-12 w-full rounded-[8px] border" />
-            </label>
-            <label className="city-section flex w-full flex-col gap-1">
-              <span className="text-base font-normal text-utility-second">
-                City
-              </span>
-              <select className="select select-bordered w-full">
-                <option disabled selected>
-                  Bangkok
-                </option>
-                <option>Songkhla</option>
-                <option>Chiangmai</option>
-              </select>
-            </label>
-            <label className="location-section flex w-full flex-col gap-1">
-              <span className="text-base font-normal text-utility-second">
-                City
-              </span>
-              <select className="select select-bordered w-full">
-                <option disabled selected>
-                  Thailand
-                </option>
-                <option>Japan</option>
-                <option>China</option>
-              </select>
-            </label>
-            <label className="name-section flex w-full flex-col gap-1">
-              <span className="text-base font-normal text-fourth-600">
-                Email
-              </span>
-              <input
-                type="text"
-                placeholder="user email"
-                className="h-12 w-full rounded-[8px] border px-4 py-3 placeholder-fourth-900"
-                disabled
-              />
-            </label>
-            <label className="username-section flex w-full flex-col gap-1">
-              <span className="text-base font-normal text-utility-second">
-                Username
-              </span>
-              <input
-                type="text"
-                placeholder="At least 6 character"
-                className="h-12 w-full rounded-[8px] border px-4 py-3 placeholder-fourth-900"
-              />
-            </label>
+
+            <div className="form-section flex flex-col gap-6">
+              <div className="flex flex-col gap-6 lg:flex-row lg:gap-6">
+                <label className="form-control w-full gap-1 lg:w-full">
+                  <span className="label-text text-base font-normal text-utility-second">
+                    Date of Birth
+                  </span>
+                  <input
+                    type="date"
+                    name="date"
+                    value={date}
+                    onChange={(event) => {
+                      setDate(event.target.value);
+                    }}
+                    className="input input-bordered h-[48px] w-full rounded-[8px] border-[1px] lg:w-full"
+                  />
+                </label>
+                <label className="name-section flex w-full flex-col gap-1 lg:w-full">
+                  <span className="text-base font-normal text-utility-second">
+                    Name
+                  </span>
+                  <input
+                    type="text"
+                    className="h-12 w-full rounded-[8px] border lg:w-full"
+                  />
+                </label>
+              </div>
+
+              <div className="flex flex-col gap-6 lg:flex-row lg:gap-6">
+                <label className="city-section flex w-full flex-col gap-1">
+                  <span className="text-base font-normal text-utility-second">
+                    City
+                  </span>
+                  <select className="select select-bordered w-full">
+                    <option disabled selected>
+                      Bangkok
+                    </option>
+                    <option>Songkhla</option>
+                    <option>Chiangmai</option>
+                  </select>
+                </label>
+                <label className="location-section flex w-full flex-col gap-1">
+                  <span className="text-base font-normal text-utility-second">
+                    Location
+                  </span>
+                  <select className="select select-bordered w-full">
+                    <option disabled selected>
+                      Thailand
+                    </option>
+                    <option>Japan</option>
+                    <option>China</option>
+                  </select>
+                </label>
+              </div>
+
+              <div className="flex flex-col gap-6">
+                <label className="name-section flex w-full flex-col gap-1">
+                  <span className="text-base font-normal text-fourth-600">
+                    Email
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="user email"
+                    className="h-12 w-full rounded-[8px] border px-4 py-3 placeholder-fourth-900"
+                    disabled
+                  />
+                </label>
+                <label className="username-section flex w-full flex-col gap-1">
+                  <span className="text-base font-normal text-utility-second">
+                    Username
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="At least 6 character"
+                    className="h-12 w-full rounded-[8px] border px-4 py-3 placeholder-fourth-900"
+                  />
+                </label>
+              </div>
+            </div>
           </div>
 
           {/* Identites and Interest Information */}
@@ -166,7 +199,7 @@ export function Profile() {
         </div>
 
         {/* Button: Preview and Update profile */}
-        <div className="button-section flex flex-row gap-4">
+        <div className="button-section flex flex-row gap-4 lg:hidden">
           <CustomButton
             children="Preview Profile"
             buttonType="secondary"
