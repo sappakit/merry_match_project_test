@@ -18,7 +18,7 @@ export function Profile() {
                 PROFILE
               </span>
               <h3 className="text-3xl font-bold text-second-500 lg:text-5xl lg:font-extrabold">
-                Let's make profile to let others know you
+                Let&apos;s make profile to let others know you
               </h3>
             </div>
             <div className="lg:flex lg:flex-col lg:justify-end">
@@ -203,16 +203,18 @@ export function Profile() {
         {/* Button: Preview and Update profile */}
         <div className="button-section flex flex-row gap-4 lg:hidden">
           <CustomButton
-            children="Preview Profile"
             buttonType="secondary"
             customStyle="w-[162px] text-base font-bold"
             onClick={() => router.push("/profile/preview-profile")}
-          />
+          >
+            Preview Profile
+          </CustomButton>
           <CustomButton
-            children="Update Profile"
             buttonType="primary"
             customStyle="w-[162px] text-base font-bold"
-          />
+          >
+            Update Profile
+          </CustomButton>
         </div>
 
         {/* Button: Delete account */}
@@ -241,15 +243,17 @@ export function Profile() {
                   Do you sure to delete account?
                 </p>
                 <CustomButton
-                  children="Yes, I want to delete"
                   buttonType="secondary"
                   className="text-base font-bold"
-                />
+                >
+                  Yes, I want to delete
+                </CustomButton>
                 <CustomButton
-                  children="No, I don't"
                   buttonType="primary"
                   className="text-base font-bold"
-                />
+                >
+                  No, I don&apos;t
+                </CustomButton>
               </div>
             </div>
           </dialog>

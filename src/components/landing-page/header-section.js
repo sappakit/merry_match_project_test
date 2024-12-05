@@ -45,12 +45,12 @@ export default function HeaderSection() {
           <article>
             <h1 className="text-5xl font-extrabold text-utility-primary">
               Make the <br />
-              first 'Merry'
+              first &apos;Merry&apos;
             </h1>
             <h2 className="mt-6 text-lg font-medium text-utility-primary">
-              If you feel lonely, let's start meeting <br />
+              If you feel lonely, let&apos;s start meeting <br />
               new people in your area! <br />
-              Don't forget to get Merry with us
+              Don&apos;t forget to get Merry with us
             </h2>
             <div className="mt-12">
               <CustomButton
