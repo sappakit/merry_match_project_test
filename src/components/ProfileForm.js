@@ -24,16 +24,18 @@ export function Profile() {
             <div className="lg:flex lg:flex-col lg:justify-end">
               <div className="button-section hidden flex-row gap-4 lg:flex lg:h-[48px]">
                 <CustomButton
-                  children="Preview Profile"
                   buttonType="secondary"
                   customStyle="w-[162px] text-base font-bold"
                   onClick={() => router.push("/profile/preview-profile")}
-                />
+                >
+                  Preview Profile
+                </CustomButton>
                 <CustomButton
-                  children="Update Profile"
                   buttonType="primary"
                   customStyle="w-[162px] text-base font-bold"
-                />
+                >
+                  Update Profile
+                </CustomButton>
               </div>
             </div>
           </div>

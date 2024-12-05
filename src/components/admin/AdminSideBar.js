@@ -2,6 +2,8 @@ import { IoCubeSharp } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import { IoIosWarning } from "react-icons/io";
 
+import Link from "next/link";
+
 export function AdminSideBar() {
   return (
     <aside className="w-64 border-r bg-white">
@@ -16,33 +18,31 @@ export function AdminSideBar() {
       <nav>
         <ul className="space-y-2">
           <li>
-            <a
+            <Link
               href="#"
               className="flex items-center rounded-lg bg-gray-200 px-6 py-3 text-gray-700"
             >
               <IoCubeSharp className="text-2xl text-primary-200" />
               <span className="ml-3 font-extrabold">Merry Package</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               href="#"
               className="flex items-center rounded-lg px-6 py-3 text-gray-600 hover:bg-gray-100"
             >
               <IoIosWarning className="text-2xl text-primary-200" />
               <span className="ml-3 font-extrabold">Complaint</span>
-            </a>
+            </Link>
           </li>
-
           <li>
-            <a
+            <Link
               href="#"
               className="mt-80 flex items-center rounded-lg border-t border-gray-300 px-5 py-6 text-gray-600 hover:bg-gray-100"
             >
               <MdLogout className="text-2xl text-primary-200" />
-
               <span className="ml-3 font-extrabold">Log out</span>
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>

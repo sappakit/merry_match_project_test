@@ -12,7 +12,7 @@ export default function CardSection() {
     },
     {
       emoji: "🥳",
-      title: "Click ‘Merry’ for get to know!",
+      title: "Click 'Merry' for get to know!",
       description: "Lorem ipsum is a placeholder text",
     },
     {

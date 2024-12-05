@@ -5,6 +5,8 @@ import { AiFillInstagram, AiFillMessage } from "react-icons/ai";
 import { CustomButton } from "./CustomUi";
 import { useRouter } from "next/navigation";
 
+import Link from "next/link";
+
 function ContactIcon({ Icon }) {
   return (
     <button
@@ -21,9 +23,9 @@ export function NavBar() {
 
   return (
     <nav className="z-50 flex h-16 items-center justify-between overflow-hidden bg-utility-primary px-6 shadow-md lg:h-20 lg:px-32">
-      <a href="/" className="text-2xl font-semibold text-utility-second">
+      <Link href="/" className="text-2xl font-semibold text-utility-second">
         Merry<span className="font-extrabold text-primary-500">Match</span>
-      </a>
+      </Link>
 
       {/* Mobile */}
       <div className="flex items-center gap-8 lg:hidden">
@@ -43,18 +45,18 @@ export function NavBar() {
 
       {/* Desktop */}
       <div className="hidden items-center gap-10 font-bold lg:flex">
-        <a
-          href=""
+        <Link
+          href="/"
           className="text-second-800 transition-colors duration-300 hover:text-second-500"
         >
           Why Merry Match?
-        </a>
-        <a
-          href=""
+        </Link>
+        <Link
+          href="/"
           className="text-second-800 transition-colors duration-300 hover:text-second-500"
         >
           How to Merry
-        </a>
+        </Link>
 
         <CustomButton
           buttonType="primary"

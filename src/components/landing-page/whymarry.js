@@ -18,13 +18,13 @@ export default function WhyMerrySection() {
             everyone
           </p>
           <p className="text-sm leading-relaxed">
-            Whether you’re committed to dating, meeting new people, expanding
+            Whether you're committed to dating, meeting new people, expanding
             your social network, meeting locals while traveling, or even just
             making a small chat with strangers.
           </p>
           <p className="mt-4 text-sm leading-relaxed">
             This site allows you to make your own dating profile, discover new
-            people, save favorite profiles, and let them know that you’re
+            people, save favorite profiles, and let them know that you're
             interested.
           </p>
         </article>

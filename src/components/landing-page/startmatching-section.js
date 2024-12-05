@@ -15,7 +15,7 @@ export default function StartMacthing() {
           </div>
 
           <h2 className="relative z-10 mb-6 mt-16 text-center text-5xl font-extrabold text-white lg:mt-0 lg:text-4xl">
-            Let’s start finding <br />
+            Let's start finding <br />
             and matching someone&nbsp;new
           </h2>
 

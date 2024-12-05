@@ -1,5 +1,5 @@
 import React from "react";
-// import Select, { components } from "react-select";
+import Select, { components } from "react-select";
 
 // ตัวเลือกของ Dropdown Indicator
 const DropdownIndicator = (props) => {

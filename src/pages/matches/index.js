@@ -10,6 +10,8 @@ import dynamic from "next/dynamic";
 
 import axios from "axios";
 
+import Link from "next/link";
+
 const LazyCardSwiper = dynamic(() => import("@/components/CardSwiper"), {
   ssr: false,
 });
@@ -165,12 +167,12 @@ function RightSidebar({
       <div className="h-[2px] w-full bg-fourth-300"></div>
 
       <div className="flex items-center justify-end gap-6 px-4 py-4">
-        <a
-          href=""
+        <Link
+          href="#"
           className="font-bold text-primary-500 transition-colors duration-300 hover:text-primary-600"
         >
           Clear
-        </a>
+        </Link>
         <CustomButton>Search</CustomButton>
       </div>
     </aside>
