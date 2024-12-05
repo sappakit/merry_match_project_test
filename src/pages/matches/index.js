@@ -4,17 +4,17 @@ import { GoHeartFill } from "react-icons/go";
 import { NavBar } from "@/components/NavBar";
 import { CustomButton } from "@/components/CustomUi";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Range } from "react-range";
 import dynamic from "next/dynamic";
+
+import axios from "axios";
 
 const LazyCardSwiper = dynamic(() => import("@/components/CardSwiper"), {
   ssr: false,
 });
 
-function AgeRangeSlider() {
-  const [values, setValues] = useState([18, 50]);
-
+function AgeRangeSlider({ age, setAge }) {
   return (
     <>
       {/* Slider */}
@@ -23,8 +23,8 @@ function AgeRangeSlider() {
           step={1}
           min={18}
           max={80}
-          values={values}
-          onChange={(values) => setValues(values)}
+          values={age}
+          onChange={(values) => setAge(values)}
           renderTrack={({ props, children }) => {
             const { key, ...restProps } = props;
             return (
@@ -32,8 +32,8 @@ function AgeRangeSlider() {
                 <div
                   className="absolute h-full bg-second-500"
                   style={{
-                    width: `${((values[1] - values[0]) / (80 - 18)) * 100}%`,
-                    marginLeft: `${((values[0] - 18) / (80 - 18)) * 100}%`,
+                    width: `${((age[1] - age[0]) / (80 - 18)) * 100}%`,
+                    marginLeft: `${((age[0] - 18) / (80 - 18)) * 100}%`,
                   }}
                 />
                 {children}
@@ -57,19 +57,19 @@ function AgeRangeSlider() {
       <div className="flex items-center gap-2">
         <input
           type="number"
-          value={values[0]}
-          onChange={(e) => setValues([+e.target.value, values[1]])}
+          value={age[0]}
+          onChange={(e) => setAge([+e.target.value, age[1]])}
           className="hover: w-full rounded-lg border-2 border-fourth-400 bg-utility-primary px-3 py-2 text-fourth-600 outline-none"
           min={18}
-          max={values[1]}
+          max={age[1]}
         />
         <span className="font-semibold text-utility-second">-</span>
         <input
           type="number"
-          value={values[1]}
-          onChange={(e) => setValues([values[0], +e.target.value])}
+          value={age[1]}
+          onChange={(e) => setAge([age[0], +e.target.value])}
           className="w-full rounded-lg border-2 border-fourth-400 bg-utility-primary px-3 py-2 text-fourth-600 outline-none"
-          min={values[0]}
+          min={age[0]}
           max={80}
         />
       </div>
@@ -92,17 +92,88 @@ function SidebarChat({ sender, message, img }) {
   );
 }
 
-function CustomCheckbox({ list }) {
+function CustomCheckbox({ list, onChange, isChecked }) {
   return (
     <div className="form-control font-semibold text-fourth-700">
       <label className="label cursor-pointer justify-start gap-3 p-0">
         <input
           type="checkbox"
           className="checkbox border-fourth-400 transition-colors duration-300 [--chkbg:theme(colors.second.500)] [--chkfg:theme(colors.utility.primary)] checked:border-second-300 checked:text-fourth-100 hover:border-second-300"
+          onChange={(e) => onChange(e.target.checked)}
+          checked={isChecked}
         />
         <span className="label-text">{list}</span>
       </label>
     </div>
+  );
+}
+
+function RightSidebar({
+  age,
+  setAge,
+  genderList,
+  selectedGender,
+  setSelectedGender,
+}) {
+  const handleCheckboxChange = (genderName, isChecked) => {
+    setSelectedGender((prev) => {
+      if (isChecked) {
+        // Add gender if checked
+        return [...prev, genderName];
+      } else {
+        // Remove gender if unchecked
+        return prev.filter((gender) => gender !== genderName);
+      }
+    });
+  };
+
+  return (
+    <aside className="flex w-[15rem] flex-col border-l-2 border-fourth-300 bg-utility-primary py-7">
+      <div className="flex h-[70%] flex-col gap-12 px-4">
+        <div className="flex flex-col gap-5">
+          <p className="font-bold text-fourth-900">Gender you interest</p>
+          <div className="flex flex-col gap-4">
+            <CustomCheckbox
+              key="default"
+              list="Default"
+              onChange={(isChecked) =>
+                handleCheckboxChange("Default", isChecked)
+              }
+              isChecked={selectedGender.includes("Default")}
+            />
+            {genderList.map((interest, index) => (
+              <CustomCheckbox
+                key={index}
+                list={interest.gender_name}
+                onChange={(isChecked) =>
+                  handleCheckboxChange(interest.gender_name, isChecked)
+                }
+                isChecked={selectedGender.includes(interest.gender_name)}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-5">
+          <p className="font-bold text-fourth-900">Age Range</p>
+          <div className="flex flex-col gap-6">
+            <AgeRangeSlider age={age} setAge={setAge} />
+          </div>
+        </div>
+      </div>
+
+      <div className="h-[2px] w-full bg-fourth-300"></div>
+
+      <div className="flex items-center justify-end gap-6 px-4 py-4">
+        <a
+          href=""
+          className="font-bold text-primary-500 transition-colors duration-300 hover:text-primary-600"
+        >
+          Clear
+        </a>
+        <CustomButton>Search</CustomButton>
+      </div>
+    </aside>
   );
 }
 
@@ -182,45 +253,64 @@ function LeftSidebar() {
   );
 }
 
-function RightSidebar() {
-  const interestList = ["Default", "Male", "Female", "Non-bunary people"];
-
-  return (
-    <aside className="flex w-[15rem] flex-col border-l-2 border-fourth-300 bg-utility-primary py-7">
-      <div className="flex h-[70%] flex-col gap-12 px-4">
-        <div className="flex flex-col gap-5">
-          <p className="font-bold text-fourth-900">Gender you interest</p>
-          <div className="flex flex-col gap-4">
-            {interestList.map((interest, index) => (
-              <CustomCheckbox key={index} list={interest} />
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-5">
-          <p className="font-bold text-fourth-900">Age Range</p>
-          <div className="flex flex-col gap-6">
-            <AgeRangeSlider />
-          </div>
-        </div>
-      </div>
-
-      <div className="h-[2px] w-full bg-fourth-300"></div>
-
-      <div className="flex items-center justify-end gap-6 px-4 py-4">
-        <a
-          href=""
-          className="font-bold text-primary-500 transition-colors duration-300 hover:text-primary-600"
-        >
-          Clear
-        </a>
-        <CustomButton>Search</CustomButton>
-      </div>
-    </aside>
-  );
-}
-
 export default function Matches() {
+  const [userProfiles, setUserProfiles] = useState([]);
+  const [genderList, setGenderList] = useState([]);
+  const [selectedGender, setSelectedGender] = useState([]);
+  const [age, setAge] = useState([18, 50]);
+
+  const fetchUserProfiles = async () => {
+    try {
+      const queryParams = new URLSearchParams();
+
+      if (selectedGender.length > 0) {
+        selectedGender.forEach((gender) => {
+          queryParams.append("gender", gender);
+        });
+      }
+
+      if (age[0]) {
+        queryParams.append("minAge", age[0]);
+      }
+
+      if (age[1]) {
+        queryParams.append("maxAge", age[1]);
+      }
+
+      const response = await axios.get(
+        `http://localhost:3000/api/users/profile?${queryParams.toString()}`,
+      );
+
+      console.log(response.data);
+
+      setUserProfiles(response.data);
+    } catch (error) {
+      console.error("Error fetching user profiles:", error);
+    }
+  };
+
+  const fetchGenderList = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/genders`);
+
+      setGenderList(response.data);
+    } catch (error) {
+      console.error("Error fetching gender list:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchTimeout = setTimeout(() => {
+      fetchUserProfiles();
+    }, 500);
+
+    return () => clearTimeout(fetchTimeout);
+  }, [selectedGender, age]);
+
+  useEffect(() => {
+    fetchGenderList();
+  }, []);
+
   return (
     <main className="items flex min-h-screen flex-col bg-utility-bg">
       <NavBar />
@@ -228,14 +318,20 @@ export default function Matches() {
         <LeftSidebar />
 
         <section className="relative flex w-[20rem] flex-grow flex-col justify-center">
-          <LazyCardSwiper />
+          <LazyCardSwiper userProfiles={userProfiles} />
 
           <p className="absolute bottom-5 z-30 w-full text-center text-fourth-700">
             Merry limit today <span className="text-primary-400">2/20</span>
           </p>
         </section>
 
-        <RightSidebar />
+        <RightSidebar
+          age={age}
+          setAge={setAge}
+          genderList={genderList}
+          selectedGender={selectedGender}
+          setSelectedGender={setSelectedGender}
+        />
       </div>
     </main>
   );

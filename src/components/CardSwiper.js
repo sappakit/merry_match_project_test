@@ -9,12 +9,8 @@ import "swiper/css";
 
 import { useState } from "react";
 
-function CardSwiper() {
-  const slideImages = [];
-
-  for (let i = 1; i < 4; i++) {
-    slideImages.push(`/images/matching-page/matches_0${i}.png`);
-  }
+function CardSwiper({ userProfiles }) {
+  const profileSlides = [...userProfiles];
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [swiperInstance, setSwiperInstance] = useState(null);
@@ -38,15 +34,15 @@ function CardSwiper() {
       }}
       breakpoints={{
         1024: {
-          slidesPerView: 1.25, // Larger screens
+          slidesPerView: 1.25,
         },
         1536: {
-          slidesPerView: 1.5, // Larger screens
+          slidesPerView: 1.5,
         },
       }}
-      className="h-full w-full" // Adjust width as needed
+      className="h-full w-full"
     >
-      {slideImages.map((image, index) => (
+      {profileSlides.map((profile, index) => (
         <SwiperSlide key={index} className="!flex items-center">
           <div className="relative mx-auto aspect-square w-full min-w-[10rem] max-w-[32.5rem] rounded-3xl 2xl:w-[60%] 2xl:max-w-full">
             {/* Text */}
@@ -55,7 +51,7 @@ function CardSwiper() {
                 <p
                   className={`text-utility-primary duration-300 ${activeIndex !== index ? "text-opacity-0" : ""}`}
                 >
-                  Daeny 24
+                  {profile.name} {profile.age} {profile.gender}
                 </p>
                 <button
                   className={`flex aspect-square items-center justify-center rounded-full bg-utility-primary p-2 transition-colors duration-300 hover:bg-opacity-25 ${activeIndex !== index ? "bg-opacity-0" : "bg-opacity-20"}`}
@@ -83,7 +79,7 @@ function CardSwiper() {
                 <button
                   className={`text-utility-primary transition-colors duration-300 ${
                     activeIndex === index
-                      ? activeIndex === slideImages.length - 1
+                      ? activeIndex === profileSlides.length - 1
                         ? "cursor-default text-opacity-50"
                         : "hover:text-neutral-200"
                       : "text-opacity-0"
@@ -114,7 +110,7 @@ function CardSwiper() {
               className={`absolute -bottom-1 z-10 h-full w-full rounded-3xl bg-cardGradient transition-colors duration-300 ${activeIndex !== index ? "blur-sm" : ""}`}
             ></div>
             <img
-              src={image}
+              src={profile.image_profile[0]}
               alt="Match 1"
               className={`h-full w-full rounded-3xl object-cover transition-all duration-300 ${activeIndex !== index ? "blur-sm grayscale" : ""}`}
             />
