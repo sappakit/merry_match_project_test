@@ -1,25 +1,18 @@
-import Image from "next/image";
-import localFont from "next/font/local";
-
 import { NavBar, Footer } from "@/components/NavBar";
-import { CustomButton } from "@/components/CustomUi";
-export default function Home() {
+import CardSection from "@/components/landing-page/card-section";
+import StartMacthing from "@/components/landing-page/startmatching-section";
+import HeaderSection from "@/components/landing-page/header-section";
+import WhyMerrySection from "@/components/landing-page/whymarry";
+
+export default function Homepage() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <>
       <NavBar />
-      <div className="flex-grow">
-        <h1 className="font-nunito text-8xl text-primary-400">test</h1>
-        <input
-          type="text"
-          placeholder="Test UI"
-          className="input input-bordered w-full max-w-xs bg-red-100 text-red-600"
-        />
-        <button className="btn bg-red-500">Button</button>
-      </div>
-
-      <CustomButton>MerryMatch</CustomButton>
-
+      <HeaderSection />
+      <WhyMerrySection />
+      <CardSection />
+      <StartMacthing />
       <Footer />
-    </div>
+    </>
   );
 }

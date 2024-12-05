@@ -1,10 +1,9 @@
-import { CustomButton } from "@/components/CustomUi";
-import { GoHeartFill } from "react-icons/go";
 import { VscSend } from "react-icons/vsc";
 import { IoShieldCheckmarkSharp } from "react-icons/io5";
 import { IoShieldCheckmarkOutline } from "react-icons/io5";
 import { FaStar } from "react-icons/fa6";
 import { TiStarOutline } from "react-icons/ti";
+
 export default function WhyMerrySection() {
   return (
     <>
