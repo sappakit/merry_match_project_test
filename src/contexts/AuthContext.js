@@ -13,6 +13,9 @@ function AuthProvider({ children }) {
   });
 
   const router = useRouter();
+  const { push } = useRouter();
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const apiBaseUrl = "http://localhost:3000";
 
   const login = async (data) => {
@@ -34,8 +37,39 @@ function AuthProvider({ children }) {
     }
   };
 
+  // const register = async (data) => {
+  //   // console.log("TEstDATA", data);
+  //   try {
+  //     await axios.post("/api/auth/register", data, {
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //     });
+  //     push("/login");
+  //   } catch (error) {
+  //     console.error(
+  //       "Registration failed:",
+  //       error.response?.data || error.message,
+  //     );
+  //   }
+  // };
+
+  const register = async (data) => {
+    console.log("TEstDATA", data);
+    try {
+      await axios.post("/api/auth/register", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      push("/login");
+    } catch (error) {
+      console.error(
+        "Registration failed:",
+        error.response?.data || error.message,
+      );
+    }
+  };
   return (
-    <AuthContext.Provider value={{ state, login }}>
+    <AuthContext.Provider value={{ state, login, register }}>
       {children}
     </AuthContext.Provider>
   );

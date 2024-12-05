@@ -65,3 +65,18 @@ export function ChatBubble({ children, type = "sender", className = "" }) {
     </div>
   );
 }
+
+
+export function ButtonBack({
+  children,
+  type = "button",
+  customStyle = "h-full px-6 py-3",
+}) {
+  let customClass = `btn min-h-0 rounded-full border-0 p-0 ${customStyle} text-primary-500`;
+
+  return (
+    <button type={type} className={customClass} customStyle={customClass}>
+      {children}
+    </button>
+  );
+}
