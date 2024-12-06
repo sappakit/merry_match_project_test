@@ -280,7 +280,7 @@ export default function Matches() {
       }
 
       const response = await axios.get(
-        `http://localhost:3000/api/users/profile?${queryParams.toString()}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}?${queryParams.toString()}`,
       );
 
       console.log(response.data);
@@ -293,7 +293,9 @@ export default function Matches() {
 
   const fetchGenderList = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/genders`);
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/genders`,
+      );
 
       setGenderList(response.data);
     } catch (error) {
