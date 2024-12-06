@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-const daisyui = require("daisyui");
-module.exports = {
+import daisyui from "daisyui";
+export default {
   darkMode: ["class"],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
